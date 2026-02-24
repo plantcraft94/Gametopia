@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("BeginDrag");
         isDragging = true;
 
         currentPlaceholder = Instantiate(placeholder, parent);
@@ -49,11 +51,19 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {
             return;
         }
-        transform.SetParent(parent);
-        transform.SetSiblingIndex(currentPlaceholder.transform.GetSiblingIndex());
-        Destroy(currentPlaceholder.gameObject);
-        isDragging = false;
-        canvasGroup.raycastTarget = true;
+        if (DropCheck(eventData))
+        {
+            transform.SetParent(parent);
+            transform.SetSiblingIndex(currentPlaceholder.transform.GetSiblingIndex());
+            Destroy(currentPlaceholder.gameObject);
+            isDragging = false;
+            canvasGroup.raycastTarget = true;
+        }
+        else
+        {
+            Destroy(currentPlaceholder.gameObject);
+            Destroy(gameObject); // Destroy the dragged item if it's not dropped on a valid drop zone
+        }
     }
     void UpdatePlaceholderIndex()
     {
@@ -75,5 +85,12 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         currentPlaceholder.transform.SetSiblingIndex(newIndex);
+    }
+    bool DropCheck(PointerEventData eventData)
+    {
+        List<RaycastResult> raycastResult = new List<RaycastResult>(); 
+        EventSystem.current.RaycastAll(eventData, raycastResult);
+        
+        return raycastResult.Count > 0;
     }
 }
