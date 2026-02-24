@@ -1,16 +1,19 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InstructionButtons : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] CommandController commandPrefab;
+    public Transform InstructionCanvas;
+    [SerializeField] Canvas canvas;
 
-    // Update is called once per frame
-    void Update()
+    public void OnClick()
     {
-        
+        CommandController current = Instantiate(commandPrefab,InstructionCanvas);
+        current.parent = InstructionCanvas;
+        // random the color
+        current.gameObject.GetComponent<Image>().color = Random.ColorHSV();
     }
 }
