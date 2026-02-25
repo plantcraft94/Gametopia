@@ -3,91 +3,83 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Timing")]
     public float moveTime = 0.25f;
 
+    [Header("State")]
     public Facing facing = Facing.Right;
-
-    Vector3 targetPos;
-
     public Vector2Int cellPos;
+
+    [Header("Refs")]
     public GridManager grid;
+
+    Vector2Int startCell;
+    Facing startFacing;
 
     void Start()
     {
         cellPos = grid.WorldToCell(transform.position);
         transform.position = grid.CellToWorld(cellPos);
 
-        targetPos = transform.position;
+        startCell = cellPos;
+        startFacing = facing;
+
         ApplyRotationInstant();
     }
 
-    Vector3 DirVector()
+    // =============================
+    // PUBLIC API (GAMEPLAY LAYER)
+    // =============================
+
+    public bool TryGetForwardCell(out Vector2Int next)
     {
-        switch (facing)
-        {
-            case Facing.Up: return Vector3.up;
-            case Facing.Right: return Vector3.right;
-            case Facing.Down: return Vector3.down;
-            case Facing.Left: return Vector3.left;
-        }
-        return Vector3.right;
+        next = cellPos + DirToCellOffset();
+        return grid.IsWalkable(next);
     }
 
-    public IEnumerator MoveForward()
+    public bool IsGoalCell(Vector2Int cell)
     {
-        Vector2Int dir = DirToCellOffset();
-        Vector2Int next = cellPos + dir;
-
-        if (!grid.IsWalkable(next))
-        {
-            Debug.Log("Blocked by wall");
-            yield break;
-        }
-
-        cellPos = next;
-        Vector3 worldTarget = grid.CellToWorld(cellPos);
-
-        yield return MoveTo(worldTarget);
-
-        if (grid.IsGoal(cellPos))
-        {
-            Debug.Log("GOAL REACHED!");
-        }
+        return grid.IsGoal(cell);
     }
 
-    public IEnumerator TurnLeft()
+    public void CommitMove(Vector2Int newCell)
     {
-        facing = (Facing)(((int)facing + 3) % 4);
-        yield return RotateToFacing();
+        cellPos = newCell;
     }
 
-    public IEnumerator TurnRight()
+    public void CommitTurn(bool right)
     {
-        facing = (Facing)(((int)facing + 1) % 4);
-        yield return RotateToFacing();
+        if (right)
+            facing = (Facing)(((int)facing + 1) % 4);
+        else
+            facing = (Facing)(((int)facing + 3) % 4);
+    }
+    public IEnumerator AnimateWait(float duration)
+    {
+        yield return new WaitForSeconds(duration);
     }
 
-    public IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(moveTime);
-    }
+    // =============================
+    // ANIMATION LAYER
+    // =============================
 
-    IEnumerator MoveTo(Vector3 pos)
+    public IEnumerator AnimateMove(Vector2Int targetCell)
     {
         Vector3 start = transform.position;
-        float t = 0;
+        Vector3 end = grid.CellToWorld(targetCell);
 
+        float t = 0;
         while (t < 1f)
         {
             t += Time.deltaTime / moveTime;
-            transform.position = Vector3.Lerp(start, pos, t);
+            transform.position = Vector3.Lerp(start, end, t);
             yield return null;
         }
 
-        transform.position = pos;
+        transform.position = end;
     }
 
-    IEnumerator RotateToFacing()
+    public IEnumerator AnimateRotate()
     {
         Quaternion start = transform.rotation;
         Quaternion end = Quaternion.Euler(0, 0, FacingToAngle());
@@ -102,6 +94,23 @@ public class PlayerController : MonoBehaviour
 
         transform.rotation = end;
     }
+
+    // =============================
+    // RESET SUPPORT
+    // =============================
+
+    public void ResetPlayer()
+    {
+        cellPos = startCell;
+        facing = startFacing;
+
+        transform.position = grid.CellToWorld(cellPos);
+        ApplyRotationInstant();
+    }
+
+    // =============================
+    // INTERNAL
+    // =============================
 
     void ApplyRotationInstant()
     {

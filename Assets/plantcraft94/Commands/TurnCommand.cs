@@ -1,31 +1,29 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class TurnCommand : MonoBehaviour, IInstruction
 {
-    public bool turnRight;
-    public void Choose(int index)
+    [SerializeField] TMP_Dropdown dropdown;
+
+    bool turnRight;
+
+    void Awake()
     {
-        switch (index)
-        {
-            case 0:
-               turnRight = false;
-               break;
-            case 1:
-               turnRight = true;
-               break;
-            default:
-                turnRight = false;
-                break;
-        }
+        dropdown.onValueChanged.AddListener(OnDirectionChanged);
+        OnDirectionChanged(dropdown.value);
+    }
+
+    public void OnDirectionChanged(int index)
+    {
+        turnRight = index == 1;
     }
 
     public IEnumerator RunInstruction(ExecutionContext context)
     {
-        if (turnRight)
-            yield return context.player.TurnRight();
-        else
-            yield return context.player.TurnLeft();
+        var player = context.player;
+
+        player.CommitTurn(turnRight);
+        yield return player.AnimateRotate();
     }
 }

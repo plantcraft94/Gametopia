@@ -623,8 +623,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6689096876511599697}
         m_TargetAssemblyTypeName: TurnCommand, Assembly-CSharp
-        m_MethodName: Choose
-        m_Mode: 0
+        m_MethodName: OnDirectionChanged
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1153,7 +1153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fdef87132634e4aa1545c489f03f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnCommand
-  turnRight: 0
+  dropdown: {fileID: 3425724235748209535}
 --- !u!1 &7536864476745794138
 GameObject:
   m_ObjectHideFlags: 0
