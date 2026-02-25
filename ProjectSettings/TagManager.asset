@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - UICanvas
+  - Dropable
   layers:
   - Default
   - TransparentFX

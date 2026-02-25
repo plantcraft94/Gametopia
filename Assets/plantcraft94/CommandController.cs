@@ -90,7 +90,13 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         List<RaycastResult> raycastResult = new List<RaycastResult>(); 
         EventSystem.current.RaycastAll(eventData, raycastResult);
-        
-        return raycastResult.Count > 0;
+        foreach(var result in raycastResult)
+        {
+            if (result.gameObject.CompareTag("Dropable"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
