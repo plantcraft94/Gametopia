@@ -13,7 +13,6 @@ public class Executor : MonoBehaviour
     Coroutine runRoutine;
     ExecutionContext context;
 
-    bool hasStarted = false;
     bool isPaused = false;
 
     void Awake()
@@ -23,10 +22,10 @@ public class Executor : MonoBehaviour
 
     public void StartProgram()
     {
-        if (hasStarted) return;
+        if (GameManager.Instance.CurrentState != GameState.Idle)
+            return;
 
-        hasStarted = true;
-        isPaused = false;
+        GameManager.Instance.SetState(GameState.Running);
 
         runRoutine = StartCoroutine(RunInstruction());
     }
@@ -39,12 +38,8 @@ public class Executor : MonoBehaviour
     public void RestartProgram()
     {
         StopAllCoroutines();
-        runRoutine = null;
-
-        hasStarted = false;
-        isPaused = false;
-
         player.ResetPlayer();
+        GameManager.Instance.SetState(GameState.Idle);
     }
 
 
@@ -52,18 +47,31 @@ public class Executor : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            while (isPaused)
-                yield return null;
+            if (GameManager.Instance.CurrentState != GameState.Running)
+                yield break;
 
             IInstruction instruction = child.GetComponent<IInstruction>();
+            ICommandVisual visual = child.GetComponent<ICommandVisual>();
 
             if (instruction != null)
             {
+                if (visual != null)
+                    visual.SetHighlight(true);
+
                 yield return instruction.RunInstruction(context);
                 yield return new WaitForSeconds(commandDelay);
+
+                if (visual != null)
+                    visual.SetHighlight(false);
+
+                if (grid.IsGoal(player.cellPos))
+                {
+                    GameManager.Instance.SetState(GameState.Win);
+                    yield break;
+                }
             }
         }
 
-        Debug.Log("PROGRAM END");
+        GameManager.Instance.SetState(GameState.Fail);
     }
 }

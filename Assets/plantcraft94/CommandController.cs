@@ -3,68 +3,106 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CommandController : MonoBehaviour,
+    IBeginDragHandler, IDragHandler, IEndDragHandler, ICommandVisual
 {
     public Transform parent;
+
     [SerializeField] Canvas canvas;
-    RectTransform rectTransform;
-    Image canvasGroup;
     [SerializeField] GameObject placeholder;
+
+    RectTransform rectTransform;
+    Image image;
+
     GameObject currentPlaceholder;
-    bool isDragging;
-    private void Awake()
+    bool isDragging = false;
+
+    void Awake()
     {
-        canvas = GameObject.FindGameObjectWithTag("UICanvas").GetComponent<Canvas>();
-        canvasGroup = GetComponent<Image>();
+        if (canvas == null)
+            canvas = GameObject.FindGameObjectWithTag("UICanvas").GetComponent<Canvas>();
+
         rectTransform = GetComponent<RectTransform>();
+        image = GetComponent<Image>();
     }
-    public void BeginDragManually(PointerEventData eventData)
+
+    [SerializeField] Image background;
+    [SerializeField] Color normalColor = Color.white;
+    [SerializeField] Color highlightColor = new Color(1f, 0.9f, 0.3f);
+
+    public void SetHighlight(bool value)
     {
-        OnBeginDrag(eventData);
+        if (background == null)
+            background = GetComponent<Image>();
+
+        background.color = value ? highlightColor : normalColor;
     }
+
+    // =============================
+    // DRAG START
+    // =============================
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("BeginDrag");
+        if (GameManager.Instance.CurrentState != GameState.Idle)
+            return;
+
         isDragging = true;
 
         currentPlaceholder = Instantiate(placeholder, parent);
         currentPlaceholder.transform.SetSiblingIndex(transform.GetSiblingIndex());
+
         transform.SetParent(canvas.transform);
         transform.SetAsLastSibling();
-        canvasGroup.raycastTarget = false;
 
+        image.raycastTarget = false;
     }
+
+    // =============================
+    // DRAGGING
+    // =============================
 
     public void OnDrag(PointerEventData eventData)
     {
         if (!isDragging)
-        {
             return;
-        }
-        rectTransform.anchoredPosition += eventData.delta;
+
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         UpdatePlaceholderIndex();
     }
+
+    // =============================
+    // DRAG END
+    // =============================
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!isDragging)
-        {
             return;
-        }
-        if (DropCheck(eventData))
+
+        isDragging = false;
+
+        if (currentPlaceholder == null)
+            return;
+
+        if (IsValidDrop(eventData))
         {
             transform.SetParent(parent);
             transform.SetSiblingIndex(currentPlaceholder.transform.GetSiblingIndex());
-            Destroy(currentPlaceholder.gameObject);
-            isDragging = false;
-            canvasGroup.raycastTarget = true;
         }
         else
         {
-            Destroy(currentPlaceholder.gameObject);
-            Destroy(gameObject); // Destroy the dragged item if it's not dropped on a valid drop zone
+            Destroy(gameObject);
         }
+
+        Destroy(currentPlaceholder);
+        image.raycastTarget = true;
     }
+
+    // =============================
+    // PLACEHOLDER LOGIC
+    // =============================
+
     void UpdatePlaceholderIndex()
     {
         int newIndex = parent.childCount;
@@ -72,11 +110,14 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         for (int i = 0; i < parent.childCount; i++)
         {
             Transform child = parent.GetChild(i);
-            if (child == currentPlaceholder.transform) continue;
+
+            if (child == currentPlaceholder.transform)
+                continue;
 
             if (rectTransform.position.y > child.position.y)
             {
                 newIndex = i;
+
                 if (currentPlaceholder.transform.GetSiblingIndex() < newIndex)
                     newIndex--;
 
@@ -86,17 +127,22 @@ public class CommandController : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         currentPlaceholder.transform.SetSiblingIndex(newIndex);
     }
-    bool DropCheck(PointerEventData eventData)
+
+    // =============================
+    // DROP CHECK
+    // =============================
+
+    bool IsValidDrop(PointerEventData eventData)
     {
-        List<RaycastResult> raycastResult = new List<RaycastResult>(); 
-        EventSystem.current.RaycastAll(eventData, raycastResult);
-        foreach(var result in raycastResult)
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (var result in results)
         {
             if (result.gameObject.CompareTag("Dropable"))
-            {
                 return true;
-            }
         }
+
         return false;
     }
 }

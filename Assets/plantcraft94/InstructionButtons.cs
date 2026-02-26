@@ -14,6 +14,6 @@ public class InstructionButtons : MonoBehaviour
         CommandController current = Instantiate(commandPrefab,InstructionCanvas);
         current.parent = InstructionCanvas;
         // random the color
-        current.gameObject.GetComponent<Image>().color = Random.ColorHSV();
+        current.gameObject.GetComponent<Image>().color = Color.white;
     }
 }
