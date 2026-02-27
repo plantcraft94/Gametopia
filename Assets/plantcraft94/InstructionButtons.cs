@@ -1,19 +1,55 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InstructionButtons : MonoBehaviour
 {
     [SerializeField] CommandController commandPrefab;
+
+    [SerializeField] CommandController endIfPrefab;
+    [SerializeField] CommandController jumpPrefab;
+    [SerializeField] CommandController jumpToPrefab;
+
     public Transform InstructionCanvas;
-    [SerializeField] Canvas canvas;
 
     public void OnClick()
     {
-        CommandController current = Instantiate(commandPrefab,InstructionCanvas);
+        CommandController current =
+            Instantiate(commandPrefab, InstructionCanvas);
+
         current.parent = InstructionCanvas;
-        // random the color
-        current.gameObject.GetComponent<Image>().color = Color.white;
+
+        current.GetComponent<Image>().color = Color.white;
+
+        IfCommand ifCmd = current.GetComponent<IfCommand>();
+
+        if (ifCmd != null && endIfPrefab != null)
+        {
+            CommandController endObj =
+                Instantiate(endIfPrefab, InstructionCanvas);
+
+            endObj.parent = InstructionCanvas;
+
+            EndIfCommand endCmd =
+                endObj.GetComponent<EndIfCommand>();
+
+            ifCmd.pair = endCmd;
+            endCmd.pair = ifCmd;
+        }
+
+        JumpCommand jump = current.GetComponent<JumpCommand>();
+
+        if (jump != null && jumpToPrefab != null)
+        {
+            CommandController jumpToObj =
+                Instantiate(jumpToPrefab, InstructionCanvas);
+
+            jumpToObj.parent = InstructionCanvas;
+
+            JumpToCommand jumpTo =
+                jumpToObj.GetComponent<JumpToCommand>();
+
+            jump.pair = jumpTo;
+            jumpTo.pair = jump;
+        }
     }
 }

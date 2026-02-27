@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class TurnCommand : MonoBehaviour, IInstruction
+public class TurnCommand : CommandBase, IInstruction
 {
     [SerializeField] TMP_Dropdown dropdown;
 
@@ -14,16 +15,21 @@ public class TurnCommand : MonoBehaviour, IInstruction
         OnDirectionChanged(dropdown.value);
     }
 
-    public void OnDirectionChanged(int index)
+    void OnDirectionChanged(int index)
     {
         turnRight = index == 1;
     }
 
-    public IEnumerator RunInstruction(ExecutionContext context)
+    public IEnumerator Execute(
+        ExecutionContext context,
+        Action<int> jumpTo,
+        int currentIP)
     {
         var player = context.player;
 
         player.CommitTurn(turnRight);
         yield return player.AnimateRotate();
+
+        jumpTo(currentIP + 1);
     }
 }

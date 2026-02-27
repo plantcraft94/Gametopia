@@ -27,14 +27,19 @@ public class PlayerController : MonoBehaviour
         ApplyRotationInstant();
     }
 
-    // =============================
-    // PUBLIC API (GAMEPLAY LAYER)
-    // =============================
+    // =====================================================
+    // MOVEMENT API
+    // =====================================================
 
     public bool TryGetForwardCell(out Vector2Int next)
     {
-        next = cellPos + DirToCellOffset();
+        next = cellPos + FacingToVector(facing);
         return grid.IsWalkable(next);
+    }
+
+    public Vector2Int GetRelativeCell(RelativeDirection dir)
+    {
+        return cellPos + GetRelativeOffset(dir);
     }
 
     public bool IsGoalCell(Vector2Int cell)
@@ -54,14 +59,15 @@ public class PlayerController : MonoBehaviour
         else
             facing = (Facing)(((int)facing + 3) % 4);
     }
+
     public IEnumerator AnimateWait(float duration)
     {
         yield return new WaitForSeconds(duration);
     }
 
-    // =============================
-    // ANIMATION LAYER
-    // =============================
+    // =====================================================
+    // ANIMATION
+    // =====================================================
 
     public IEnumerator AnimateMove(Vector2Int targetCell)
     {
@@ -95,9 +101,9 @@ public class PlayerController : MonoBehaviour
         transform.rotation = end;
     }
 
-    // =============================
-    // RESET SUPPORT
-    // =============================
+    // =====================================================
+    // RESET
+    // =====================================================
 
     public void ResetPlayer()
     {
@@ -108,9 +114,9 @@ public class PlayerController : MonoBehaviour
         ApplyRotationInstant();
     }
 
-    // =============================
-    // INTERNAL
-    // =============================
+    // =====================================================
+    // INTERNAL LOGIC
+    // =====================================================
 
     void ApplyRotationInstant()
     {
@@ -129,15 +135,57 @@ public class PlayerController : MonoBehaviour
         return 0;
     }
 
-    Vector2Int DirToCellOffset()
+    Vector2Int FacingToVector(Facing f)
     {
-        switch (facing)
+        switch (f)
         {
             case Facing.Up: return Vector2Int.up;
             case Facing.Right: return Vector2Int.right;
             case Facing.Down: return Vector2Int.down;
             case Facing.Left: return Vector2Int.left;
         }
-        return Vector2Int.right;
+        return Vector2Int.up;
+    }
+
+    // =====================================================
+    // RELATIVE DIRECTION SYSTEM (FOR IF COMMAND)
+    // =====================================================
+
+    Vector2Int GetRelativeOffset(RelativeDirection dir)
+    {
+        // Rotation mapping:
+        // Ahead  = +0
+        // Right  = +1
+        // Behind = +2
+        // Left   = +3
+
+        int rotationOffset = 0;
+
+        switch (dir)
+        {
+            case RelativeDirection.Ahead: rotationOffset = 0; break;
+            case RelativeDirection.Right: rotationOffset = 1; break;
+            case RelativeDirection.Behind: rotationOffset = 2; break;
+            case RelativeDirection.Left: rotationOffset = 3; break;
+        }
+
+        int finalFacing =
+            ((int)facing + rotationOffset) % 4;
+
+        return FacingToVector((Facing)finalFacing);
+    }
+    public bool IsWall(Vector2Int cell)
+    {
+        return !grid.IsWalkable(cell);
+    }
+
+    public bool IsGround(Vector2Int cell)
+    {
+        return grid.IsWalkable(cell) && !grid.IsGoal(cell);
+    }
+
+    public bool IsGoal(Vector2Int cell)
+    {
+        return grid.IsGoal(cell);
     }
 }

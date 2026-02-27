@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Executor : MonoBehaviour
@@ -26,8 +27,7 @@ public class Executor : MonoBehaviour
             return;
 
         GameManager.Instance.SetState(GameState.Running);
-
-        runRoutine = StartCoroutine(RunInstruction());
+        runRoutine = StartCoroutine(RunProgram());
     }
 
     public void PauseProgram()
@@ -42,36 +42,84 @@ public class Executor : MonoBehaviour
         GameManager.Instance.SetState(GameState.Idle);
     }
 
-
-    IEnumerator RunInstruction()
+    IEnumerator RunProgram()
     {
+        List<IInstruction> instructions = new List<IInstruction>();
+        List<CommandBase> commandBases = new List<CommandBase>();
+
         foreach (Transform child in transform)
+        {
+            var ins = child.GetComponent<IInstruction>();
+            var cmd = child.GetComponent<CommandBase>();
+
+            if (ins != null && cmd != null)
+            {
+                instructions.Add(ins);
+                commandBases.Add(cmd);
+            }
+        }
+
+        for (int i = 0; i < commandBases.Count; i++)
+        {
+            commandBases[i].runtimeIndex = i;
+        }
+
+        int ip = 0;
+        int safety = 0;
+
+        while (ip >= 0 && ip < instructions.Count)
         {
             if (GameManager.Instance.CurrentState != GameState.Running)
                 yield break;
 
-            IInstruction instruction = child.GetComponent<IInstruction>();
-            ICommandVisual visual = child.GetComponent<ICommandVisual>();
+            while (isPaused)
+                yield return null;
 
-            if (instruction != null)
+            safety++;
+            if (safety > 500)
             {
-                if (visual != null)
-                    visual.SetHighlight(true);
+                Debug.LogWarning("Infinite loop detected");
+                GameManager.Instance.SetState(GameState.Fail);
+                yield break;
+            }
 
-                yield return instruction.RunInstruction(context);
-                yield return new WaitForSeconds(commandDelay);
+            int currentIp = ip;
 
-                if (visual != null)
-                    visual.SetHighlight(false);
+            currentIp = ip;
+            SetHighlight(commandBases, currentIp, true);
 
-                if (grid.IsGoal(player.cellPos))
-                {
-                    GameManager.Instance.SetState(GameState.Win);
-                    yield break;
-                }
+            int nextIP = currentIp + 1;
+
+            yield return instructions[currentIp]
+                .Execute(context, (newIP) => nextIP = newIP, currentIp);
+
+            yield return new WaitForSeconds(commandDelay);
+
+            SetHighlight(commandBases, currentIp, false);
+
+            ip = nextIP;
+
+            yield return new WaitForSeconds(commandDelay);
+
+            SetHighlight(commandBases, currentIp, false);
+
+            if (grid.IsGoal(player.cellPos))
+            {
+                GameManager.Instance.SetState(GameState.Win);
+                yield break;
             }
         }
 
         GameManager.Instance.SetState(GameState.Fail);
+    }
+
+    void SetHighlight(List<CommandBase> commands, int index, bool value)
+    {
+        if (index < 0 || index >= commands.Count)
+            return;
+
+        var visual = commands[index].GetComponent<ICommandVisual>();
+        if (visual != null)
+            visual.SetHighlight(value);
     }
 }

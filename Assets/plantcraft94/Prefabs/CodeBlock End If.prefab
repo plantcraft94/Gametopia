@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move Forward
+  m_text: END IF
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -149,9 +149,9 @@ GameObject:
   - component: {fileID: 2965766651603309086}
   - component: {fileID: 5389443024120318000}
   - component: {fileID: 4539450105592689440}
-  - component: {fileID: 8501180211849336203}
+  - component: {fileID: 6823041369749251172}
   m_Layer: 5
-  m_Name: CodeBlock Move
+  m_Name: CodeBlock End If
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,8 +174,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 46.16211, y: -2.5046}
-  m_SizeDelta: {x: 192.3241, y: 41.1402}
+  m_AnchoredPosition: {x: 55.2761, y: -0.452}
+  m_SizeDelta: {x: 250.1368, y: 39.3296}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2965766651603309086
 CanvasRenderer:
@@ -233,7 +233,7 @@ MonoBehaviour:
   background: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   highlightColor: {r: 1, g: 0.9, b: 0.3, a: 1}
---- !u!114 &8501180211849336203
+--- !u!114 &6823041369749251172
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,7 +242,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 7511755490933984142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac4ae93d0c439714ba5f24a3dd0d6066, type: 3}
+  m_Script: {fileID: 11500000, guid: 893cea5a69a94a64fb3eedc14333f28d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoveCommand
+  m_EditorClassIdentifier: Assembly-CSharp::EndIfCommand
   runtimeIndex: 0
+  pair: {fileID: 0}

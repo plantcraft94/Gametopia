@@ -1,6 +1,11 @@
+using System;
 using System.Collections;
 
 public interface IInstruction
 {
-    IEnumerator RunInstruction(ExecutionContext context);
+    IEnumerator Execute(
+        ExecutionContext context,
+        Action<int> jumpTo,
+        int currentIP
+    );
 }

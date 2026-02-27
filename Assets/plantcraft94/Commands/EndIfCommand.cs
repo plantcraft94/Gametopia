@@ -2,18 +2,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class WaitCommand : CommandBase, IInstruction
+public class EndIfCommand : PairedCommand, IInstruction
 {
-    [SerializeField]
-    public float waitTime = 0.25f;
-
     public IEnumerator Execute(
         ExecutionContext context,
         Action<int> jumpTo,
         int currentIP)
     {
-        yield return context.player.AnimateWait(waitTime);
-
+        // Just go to next instruction
         jumpTo(currentIP + 1);
+        yield break;
     }
 }

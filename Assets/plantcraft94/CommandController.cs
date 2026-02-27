@@ -92,6 +92,13 @@ public class CommandController : MonoBehaviour,
         }
         else
         {
+            PairedCommand paired = GetComponent<PairedCommand>();
+
+            if (paired != null && paired.pair != null)
+            {
+                Destroy(paired.pair.gameObject);
+            }
+
             Destroy(gameObject);
         }
 
@@ -145,4 +152,5 @@ public class CommandController : MonoBehaviour,
 
         return false;
     }
+
 }

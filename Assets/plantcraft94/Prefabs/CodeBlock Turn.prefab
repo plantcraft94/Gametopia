@@ -520,8 +520,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -62.189, y: 0}
-  m_SizeDelta: {x: 110.38, y: 100}
+  m_AnchoredPosition: {x: -88.2, y: 0.97709}
+  m_SizeDelta: {x: 132.4, y: 36.082}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &488922153360130084
 CanvasRenderer:
@@ -1085,8 +1085,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 67.378784, y: 6.7878}
-  m_SizeDelta: {x: 234.7576, y: 113.5756}
+  m_AnchoredPosition: {x: 89.39624, y: -3.7733}
+  m_SizeDelta: {x: 278.7924, y: 58.0846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2965766651603309086
 CanvasRenderer:
@@ -1141,6 +1141,9 @@ MonoBehaviour:
   parent: {fileID: 0}
   canvas: {fileID: 0}
   placeholder: {fileID: 3934461771677449545, guid: 2c4fa820e161a3949bda54ee62b5b9b9, type: 3}
+  background: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 1, g: 0.9, b: 0.3, a: 1}
 --- !u!114 &6689096876511599697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1153,6 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fdef87132634e4aa1545c489f03f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnCommand
+  runtimeIndex: 0
   dropdown: {fileID: 3425724235748209535}
 --- !u!1 &7536864476745794138
 GameObject:
@@ -1350,7 +1354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: 0}
+  m_AnchoredPosition: {x: -76.9, y: 0}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5500498067125850514

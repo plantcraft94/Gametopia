@@ -1,22 +1,23 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class MoveCommand : MonoBehaviour, IInstruction
+public class MoveCommand : CommandBase, IInstruction
 {
-    public IEnumerator RunInstruction(ExecutionContext context)
+    public IEnumerator Execute(
+        ExecutionContext context,
+        Action<int> jumpTo,
+        int currentIP)
     {
         var player = context.player;
 
-        if (!player.TryGetForwardCell(out var next))
+        if (player.TryGetForwardCell(out Vector2Int nextCell))
         {
-            Debug.Log("Blocked");
-            yield break;
+            player.CommitMove(nextCell);
+            yield return player.AnimateMove(nextCell);
         }
 
-        player.CommitMove(next);
-        yield return player.AnimateMove(next);
-
-        if (player.IsGoalCell(next))
-            Debug.Log("GOAL!");
+        // default next
+        jumpTo(currentIP + 1);
     }
 }
