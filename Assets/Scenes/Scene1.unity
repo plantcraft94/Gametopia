@@ -1876,6 +1876,7 @@ GameObject:
   - component: {fileID: 728445500}
   - component: {fileID: 728445499}
   - component: {fileID: 728445501}
+  - component: {fileID: 728445502}
   m_Layer: 5
   m_Name: InstructionCanvas
   m_TagString: Untagged
@@ -1957,6 +1958,19 @@ MonoBehaviour:
   player: {fileID: 161772903}
   grid: {fileID: 1862722923}
   commandDelay: 0.25
+--- !u!114 &728445502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728445497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a1d60db08d6dca3bf97e445390cb5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommandIndentController
+  indentWidth: 40
 --- !u!1 &775361727
 GameObject:
   m_ObjectHideFlags: 0

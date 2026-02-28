@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PairVisualConnector : MonoBehaviour
+public class IfVisualConnector : MonoBehaviour
 {
     [SerializeField] RectTransform lineImage;
 

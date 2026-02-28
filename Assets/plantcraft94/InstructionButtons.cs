@@ -13,12 +13,16 @@ public class InstructionButtons : MonoBehaviour
 
     public void OnClick()
     {
+    CommandController current =
+        Instantiate(commandPrefab, InstructionCanvas);
+
+    current.parent = InstructionCanvas;
+
         CommandController current =
             Instantiate(commandPrefab, InstructionCanvas);
 
         current.parent = InstructionCanvas;
 
-        current.GetComponent<Image>().color = Color.white;
 
         IfCommand ifCmd = current.GetComponent<IfCommand>();
 

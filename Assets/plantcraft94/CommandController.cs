@@ -104,6 +104,8 @@ public class CommandController : MonoBehaviour,
 
         Destroy(currentPlaceholder);
         image.raycastTarget = true;
+        parent.GetComponent<CommandIndentController>()
+      ?.RebuildIndent();
     }
 
     // =============================
