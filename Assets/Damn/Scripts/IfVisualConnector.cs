@@ -22,12 +22,14 @@ public class IfVisualConnector : MonoBehaviour
         if (ifCommand.pair == null && jumpCommand.pair == null) return;
         if (ifCommand != null)
         {
-            var end = ifCommand.pair.GetComponent<RectTransform>();
+            var end = ifCommand.pair.gameObject.GetComponent<RectTransform>();
 
-            Vector3 startPos = transform.position;
-            Vector3 endPos = end.position;
+            Vector3 startPos = rect.anchoredPosition;
+            Vector3 endPos = end.anchoredPosition;
 
-            float height = Mathf.Abs(endPos.y - startPos.y) + end.sizeDelta.y + 20;
+            Debug.Log($"{endPos.y} , {end.sizeDelta.y}, {startPos.y}, {rect.sizeDelta.y}");
+
+            float height = Mathf.Abs(endPos.y - end.sizeDelta.y/2 - (startPos.y + rect.sizeDelta.y/2));
 
             lineImage.sizeDelta = new Vector2(lineImage.sizeDelta.x, height);
             // lineImage.position = new Vector3(

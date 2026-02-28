@@ -7,8 +7,9 @@ public class CommandController : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, ICommandVisual
 {
     public Transform parent;
+    GameObject HigherLayer;
 
-    [SerializeField] Canvas canvas;
+    Canvas canvas;
     [SerializeField] GameObject placeholder;
 
     RectTransform rectTransform;
@@ -21,6 +22,7 @@ public class CommandController : MonoBehaviour,
     {
         if (canvas == null)
             canvas = GameObject.FindGameObjectWithTag("UICanvas").GetComponent<Canvas>();
+            HigherLayer = GameObject.FindGameObjectWithTag("Dropable");
 
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
@@ -52,7 +54,7 @@ public class CommandController : MonoBehaviour,
         currentPlaceholder = Instantiate(placeholder, parent);
         currentPlaceholder.transform.SetSiblingIndex(transform.GetSiblingIndex());
 
-        transform.SetParent(canvas.transform);
+        transform.SetParent(HigherLayer.transform);
         transform.SetAsLastSibling();
 
         image.raycastTarget = false;
