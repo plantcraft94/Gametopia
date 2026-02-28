@@ -16,10 +16,14 @@ public class IfVisualConnector : MonoBehaviour
         jumpCommand = GetComponent<JumpCommand>();
         rect = GetComponent<RectTransform>();
     }
+    private void Start()
+    {
+        lineImage.transform.GetComponent<Image>().color = new Color(Random.Range(0f, 1f),Random.Range(0f, 1f), Random.Range(0f, 1f));
+    }
 
     void Update()
     {
-        if (ifCommand.pair == null && jumpCommand.pair == null) return;
+        if (ifCommand?.pair == null && jumpCommand?.pair == null) return;
         if (ifCommand != null)
         {
             var end = ifCommand.pair.gameObject.GetComponent<RectTransform>();
@@ -29,7 +33,7 @@ public class IfVisualConnector : MonoBehaviour
 
             Debug.Log($"{endPos.y} , {end.sizeDelta.y}, {startPos.y}, {rect.sizeDelta.y}");
 
-            float height = Mathf.Abs(endPos.y - end.sizeDelta.y/2 - (startPos.y + rect.sizeDelta.y/2));
+            float height = Mathf.Abs(endPos.y - end.sizeDelta.y / 2 - (startPos.y + rect.sizeDelta.y / 2));
 
             lineImage.sizeDelta = new Vector2(lineImage.sizeDelta.x, height);
             // lineImage.position = new Vector3(
@@ -41,16 +45,26 @@ public class IfVisualConnector : MonoBehaviour
         {
             var end = jumpCommand.pair.GetComponent<RectTransform>();
 
-            Vector3 startPos = transform.position;
-            Vector3 endPos = end.position;
+            Vector3 startPos = rect.anchoredPosition;
+            Vector3 endPos = end.anchoredPosition;
 
-            float height = Mathf.Abs(endPos.y - startPos.y);
+            float length = endPos.y - startPos.y;
+            if (length < 0)
+            {
+                lineImage.rotation = Quaternion.Euler(180, 0, 0);
+            }
+            else
+            {
+                lineImage.rotation = Quaternion.Euler(0, 0, 0);
+            }
 
-            lineImage.sizeDelta = new Vector2(4, height);
-            lineImage.position = new Vector3(
-                startPos.x - 60f,
-                (startPos.y + endPos.y) / 2f,
-                0);
+            float height = Mathf.Abs(length);
+
+            lineImage.sizeDelta = new Vector2(lineImage.sizeDelta.x, height);
+            // lineImage.position = new Vector3(
+            //     startPos.x - 60f,
+            //     (startPos.y + endPos.y) / 2f,
+            //     0);
         }
 
     }
