@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")]
     public GameObject winPanel;
-    public GameObject failPanel;
 
     void Awake()
     {
@@ -21,7 +20,6 @@ public class GameManager : MonoBehaviour
         CurrentState = newState;
 
         winPanel.SetActive(newState == GameState.Win);
-        failPanel.SetActive(newState == GameState.Fail);
     }
 
     public bool IsRunning()
