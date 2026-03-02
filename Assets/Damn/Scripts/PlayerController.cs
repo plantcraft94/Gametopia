@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -126,7 +127,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(0, 0, FacingToAngle());
     }
-
+    
     float FacingToAngle()
     {
         switch (facing)
