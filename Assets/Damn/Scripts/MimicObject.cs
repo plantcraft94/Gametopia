@@ -11,15 +11,19 @@ public class MimicObject : MonoBehaviour
     bool isBound = false;
     Vector2Int startCell;
 
-    public void Initialize(GridManager g)
+    void Awake()
     {
-        grid = g;
+        grid = FindFirstObjectByType<GridManager>();
+
         cellPos = grid.WorldToCell(transform.position);
         startCell = cellPos;
 
         transform.position = grid.CellToWorld(cellPos);
     }
-
+    public void Initialize(GridManager g)
+    {
+        cellPos = grid.WorldToCell(transform.position);
+    }
     public void Bind(PlayerController player)
     {
         if (isBound) return;
@@ -71,7 +75,11 @@ public class MimicObject : MonoBehaviour
     {
         Unbind();
 
+        StopAllCoroutines();
+
         cellPos = startCell;
-        transform.position = grid.CellToWorld(startCell);
+
+        if (grid != null)
+            transform.position = grid.CellToWorld(startCell);
     }
 }
