@@ -173,7 +173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Left
+  m_text: Hook
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -612,10 +612,13 @@ MonoBehaviour:
   m_MultiSelect: 0
   m_Options:
     m_Options:
-    - m_Text: Left
+    - m_Text: Hook
       m_Image: {fileID: 0}
       m_Color: {r: 0, g: 0, b: 0, a: 0}
-    - m_Text: Right
+    - m_Text: Pull
+      m_Image: {fileID: 0}
+      m_Color: {r: 0, g: 0, b: 0, a: 0}
+    - m_Text: Mimic
       m_Image: {fileID: 0}
       m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_OnValueChanged:
@@ -1060,6 +1063,7 @@ GameObject:
   - component: {fileID: 5389443024120318000}
   - component: {fileID: 4539450105592689440}
   - component: {fileID: 98559278397250133}
+  - component: {fileID: 7187037230656557759}
   m_Layer: 5
   m_Name: CodeBlock Tool
   m_TagString: Untagged
@@ -1156,8 +1160,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToolCommand
   runtimeIndex: 0
-  toolType: 0
+  toolType: 2
   range: 5
+--- !u!114 &7187037230656557759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7511755490933984142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4545d9a5093dde40933cad834eb8f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToolCommandUI
+  toolDropdown: {fileID: 3425724235748209535}
 --- !u!1 &7536864476745794138
 GameObject:
   m_ObjectHideFlags: 0

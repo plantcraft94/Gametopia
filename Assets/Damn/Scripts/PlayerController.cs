@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     Vector2Int startCell;
     Facing startFacing;
+    public event Action<Vector2Int, Vector2Int> OnMoved;
 
     void Start()
     {
@@ -49,7 +51,9 @@ public class PlayerController : MonoBehaviour
 
     public void CommitMove(Vector2Int newCell)
     {
+        Vector2Int oldCell = cellPos;
         cellPos = newCell;
+        OnMoved?.Invoke(oldCell, newCell);
     }
 
     public void CommitTurn(bool right)

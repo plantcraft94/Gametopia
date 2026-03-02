@@ -38,10 +38,19 @@ public class Executor : MonoBehaviour
     public void RestartProgram()
     {
         StopAllCoroutines();
+
         player.ResetPlayer();
+
+        MimicObject[] mimics = Object.FindObjectsByType<MimicObject>(FindObjectsSortMode.None);
+        foreach (var m in mimics)
+        {
+            m.ResetObject();
+        }
+
+        ToolCommand.ResetActiveMimic();
+
         GameManager.Instance.SetState(GameState.Idle);
     }
-
     IEnumerator RunProgram()
     {
         List<IInstruction> instructions = new List<IInstruction>();
