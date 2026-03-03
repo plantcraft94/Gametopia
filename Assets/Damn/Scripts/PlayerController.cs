@@ -14,10 +14,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Refs")]
     public GridManager grid;
-
+    PlayerResource playerResource;
     Vector2Int startCell;
     Facing startFacing;
     public event Action<Vector2Int, Vector2Int> OnMoved;
+
+    private void Awake()
+    {
+        playerResource = GetComponent<PlayerResource>();
+    }
 
     void Start()
     {
@@ -117,6 +122,7 @@ public class PlayerController : MonoBehaviour
 
         transform.position = grid.CellToWorld(cellPos);
         ApplyRotationInstant();
+        playerResource.ResetResource();
     }
 
     // =====================================================

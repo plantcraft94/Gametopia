@@ -42,7 +42,12 @@ public class Executor : MonoBehaviour
         player.ResetPlayer();
 
         MimicObject[] mimics = Object.FindObjectsByType<MimicObject>(FindObjectsSortMode.None);
+        PullableComponent[] pulls = Object.FindObjectsByType<PullableComponent>(FindObjectsInactive.Include,FindObjectsSortMode.None);
         foreach (var m in mimics)
+        {
+            m.ResetObject();
+        }
+        foreach (var m in pulls)
         {
             m.ResetObject();
         }
