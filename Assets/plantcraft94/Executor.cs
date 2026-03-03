@@ -101,7 +101,11 @@ public class Executor : MonoBehaviour
 
             yield return instructions[currentIp]
                 .Execute(context, (newIP) => nextIP = newIP, currentIp);
-
+            if (grid.IsHole(player.cellPos))
+{
+            GameManager.Instance.SetState(GameState.Fail);
+            yield break;
+}
             yield return new WaitForSeconds(commandDelay);
 
             SetHighlight(commandBases, currentIp, false);

@@ -35,10 +35,10 @@ public class PlayerController : MonoBehaviour
     // =====================================================
 
     public bool TryGetForwardCell(out Vector2Int next)
-    {
-        next = cellPos + FacingToVector(facing);
-        return grid.IsWalkable(next);
-    }
+{
+    next = cellPos + FacingToVector(facing);
+    return grid.IsWalkable(next) || grid.IsHole(next);
+}
 
     public Vector2Int GetRelativeCell(RelativeDirection dir)
     {

@@ -36,4 +36,9 @@ public class GridManager : MonoBehaviour
         Vector3Int c = new Vector3Int(cell.x, cell.y, 0);
         return goalTilemap.HasTile(c);
     }
+
+    public bool IsHole(Vector2Int cell)
+    {
+    return !IsWalkable(cell) && !IsGoal(cell);
+    }
 }
