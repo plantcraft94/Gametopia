@@ -7,6 +7,7 @@ public class PullableComponent : MonoBehaviour, IPullable
     public Vector2Int cellPos;
     Vector2Int startCell;
     public GridManager grid;
+
     void Awake()
     {
         grid = FindFirstObjectByType<GridManager>();
@@ -16,23 +17,26 @@ public class PullableComponent : MonoBehaviour, IPullable
 
         transform.position = grid.CellToWorld(cellPos);
     }
+
     public IEnumerator OnPull(PlayerController player, GridManager grid)
     {
-        if (transform.gameObject.CompareTag("KeyItem"))
+        if (gameObject.CompareTag("KeyItem"))
         {
             yield return PullToPlayer(player, grid);
+            yield break;
         }
-        else
-        {
-            Vector2Int dir = player.GetFacingVector();
-            Vector2Int cell = grid.WorldToCell(transform.position);
-            Vector2Int target = cell - dir;
 
-            if (!grid.IsWalkable(target))
-                yield break;
+        Vector2Int dir = player.GetFacingVector();
+        Vector2Int cell = grid.WorldToCell(transform.position);
+        Vector2Int target = cell - dir;
 
-            yield return MoveTo(target, grid);
-        }
+        if (!grid.CanEnter(target))
+            yield break;
+
+        if (FindObjectAtCell(target, grid) != null)
+            yield break;
+
+        yield return MoveTo(target, grid);
     }
 
     IEnumerator MoveTo(Vector2Int target, GridManager grid)
@@ -41,21 +45,28 @@ public class PullableComponent : MonoBehaviour, IPullable
         Vector3 end = grid.CellToWorld(target);
 
         float t = 0;
+        float moveTime = 0.25f;
         while (t < 1f)
         {
-            t += Time.deltaTime / 0.25f;
+            t += Time.deltaTime / moveTime;
             transform.position = Vector3.Lerp(start, end, t);
             yield return null;
         }
 
         transform.position = end;
+        cellPos = target;
+
+        if (grid.IsHole(target))
+        {
+            Destroy(gameObject);
+        }
     }
+
     IEnumerator PullToPlayer(PlayerController player, GridManager grid)
     {
         Vector2Int playerCell = grid.WorldToCell(player.transform.position);
         Vector2Int currentCell = grid.WorldToCell(transform.position);
 
-        // Move step-by-step toward player
         while (currentCell != playerCell)
         {
             Vector2Int dir = new Vector2Int(
@@ -65,18 +76,34 @@ public class PullableComponent : MonoBehaviour, IPullable
 
             Vector2Int next = currentCell + dir;
 
-            // Optional safety
-            if (!grid.IsWalkable(next) && next != playerCell)
+            if (!grid.CanEnter(next) && next != playerCell)
+                yield break;
+
+            if (next != playerCell && FindObjectAtCell(next, grid) != null)
                 yield break;
 
             yield return MoveTo(next, grid);
 
+            if (grid.IsHole(next))
+                yield break;
+
             currentCell = next;
         }
     }
+
+    GameObject FindObjectAtCell(Vector2Int cell, GridManager grid)
+    {
+        Vector3 worldPos = grid.CellToWorld(cell);
+        Collider2D col = Physics2D.OverlapPoint(worldPos);
+
+        if (col != null)
+            return col.gameObject;
+
+        return null;
+    }
+
     public void ResetObject()
     {
-
         StopAllCoroutines();
 
         cellPos = startCell;

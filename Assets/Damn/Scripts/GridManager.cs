@@ -28,6 +28,16 @@ public class GridManager : MonoBehaviour
         if (wallTilemap.HasTile(c))
             return false;
 
+        return groundTilemap.HasTile(c) || goalTilemap.HasTile(c);
+    }
+
+    public bool CanEnter(Vector2Int cell)
+    {
+        Vector3Int c = new Vector3Int(cell.x, cell.y, 0);
+
+        if (wallTilemap.HasTile(c))
+            return false;
+
         return true;
     }
 
@@ -39,6 +49,12 @@ public class GridManager : MonoBehaviour
 
     public bool IsHole(Vector2Int cell)
     {
-    return !IsWalkable(cell) && !IsGoal(cell);
+        Vector3Int c = new Vector3Int(cell.x, cell.y, 0);
+
+        bool hasGround = groundTilemap.HasTile(c);
+        bool hasWall = wallTilemap.HasTile(c);
+        bool hasGoal = goalTilemap.HasTile(c);
+
+        return !hasGround && !hasWall && !hasGoal;
     }
 }

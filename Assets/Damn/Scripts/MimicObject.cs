@@ -20,10 +20,12 @@ public class MimicObject : MonoBehaviour, IMimicable
 
         transform.position = grid.CellToWorld(cellPos);
     }
+
     public void Initialize(GridManager g)
     {
         cellPos = grid.WorldToCell(transform.position);
     }
+
     public void Bind(PlayerController player)
     {
         if (isBound) return;
@@ -37,7 +39,9 @@ public class MimicObject : MonoBehaviour, IMimicable
     {
         if (!isBound) return;
 
-        boundPlayer.OnMoved -= HandlePlayerMoved;
+        if (boundPlayer != null)
+            boundPlayer.OnMoved -= HandlePlayerMoved;
+
         boundPlayer = null;
         isBound = false;
     }
@@ -47,7 +51,7 @@ public class MimicObject : MonoBehaviour, IMimicable
         Vector2Int delta = newCell - oldCell;
         Vector2Int target = cellPos + delta;
 
-        if (!grid.IsWalkable(target))
+        if (!grid.CanEnter(target))
             return;
 
         StartCoroutine(AnimateMove(target));
@@ -70,7 +74,13 @@ public class MimicObject : MonoBehaviour, IMimicable
 
         transform.position = end;
         cellPos = targetCell;
+
+        if (grid.IsHole(cellPos))
+        {
+            Destroy(gameObject);
+        }
     }
+
     public void ResetObject()
     {
         Unbind();

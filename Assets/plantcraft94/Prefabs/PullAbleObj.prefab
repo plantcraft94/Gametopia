@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4775275169126593487}
   - component: {fileID: 7615315995211768438}
   - component: {fileID: 2388898778153536488}
+  - component: {fileID: 9001768243692528105}
   m_Layer: 0
   m_Name: PullAbleObj
-  m_TagString: PullAble
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,3 +139,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &9001768243692528105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4894652408925188103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f950d0abe2fb4245844cd4e446eade7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PullableComponent
+  cellPos: {x: 0, y: 0}
+  grid: {fileID: 0}

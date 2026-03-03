@@ -40,10 +40,15 @@ public class PlayerController : MonoBehaviour
     // =====================================================
 
     public bool TryGetForwardCell(out Vector2Int next)
-{
-    next = cellPos + FacingToVector(facing);
-    return grid.IsWalkable(next) || grid.IsHole(next);
-}
+    {
+        next = cellPos + FacingToVector(facing);
+        return grid.CanEnter(next);
+    }
+
+    public Vector2Int GetFacingVector()
+    {
+        return FacingToVector(facing);
+    }
 
     public Vector2Int GetRelativeCell(RelativeDirection dir)
     {
@@ -158,17 +163,8 @@ public class PlayerController : MonoBehaviour
         return Vector2Int.up;
     }
 
-    // =====================================================
-    // RELATIVE DIRECTION SYSTEM (FOR IF COMMAND)
-    // =====================================================
-
     Vector2Int GetRelativeOffset(RelativeDirection dir)
     {
-        // Rotation mapping:
-        // Ahead  = +0
-        // Right  = +1
-        // Behind = +2
-        // Left   = +3
 
         int rotationOffset = 0;
 
@@ -199,8 +195,4 @@ public class PlayerController : MonoBehaviour
     {
         return grid.IsGoal(cell);
     }
-    public Vector2Int GetFacingVector()
-{
-    return FacingToVector(facing);
-}
 }

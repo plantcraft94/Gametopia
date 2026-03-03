@@ -52,7 +52,7 @@ public class ToolCommand : CommandBase, IInstruction
                 }
             }
 
-            if (!grid.IsWalkable(checkCell))
+            if (!grid.CanEnter(checkCell))
                 yield break;
         }
     }
@@ -69,22 +69,17 @@ public class ToolCommand : CommandBase, IInstruction
 
             GameObject hit = FindObjectAtCell(checkCell, grid);
 
-            if (hit == null)
+            if (hit != null)
             {
-                if (!grid.IsWalkable(checkCell))
+                var pullable = hit.GetComponent<IPullable>();
+                if (pullable != null)
+                {
+                    yield return pullable.OnPull(player, grid);
                     yield break;
-
-                continue;
+                }
             }
 
-            var pullable = hit.GetComponent<IPullable>();
-            if (pullable != null)
-            {
-                yield return pullable.OnPull(player, grid);
-                yield break;
-            }
-
-            if (!grid.IsWalkable(checkCell))
+            if (!grid.CanEnter(checkCell))
                 yield break;
         }
     }
@@ -119,7 +114,7 @@ public class ToolCommand : CommandBase, IInstruction
                 }
             }
 
-            if (!grid.IsWalkable(checkCell))
+            if (!grid.CanEnter(checkCell))
                 yield break;
         }
     }

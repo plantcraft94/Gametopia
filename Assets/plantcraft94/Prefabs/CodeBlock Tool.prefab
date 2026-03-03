@@ -1160,7 +1160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToolCommand
   runtimeIndex: 0
-  toolType: 2
+  toolType: 0
   range: 5
 --- !u!114 &7187037230656557759
 MonoBehaviour:
