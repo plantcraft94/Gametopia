@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class MimicObject : MonoBehaviour, IMimicable
@@ -54,6 +54,10 @@ public class MimicObject : MonoBehaviour, IMimicable
         if (!grid.CanEnter(target))
             return;
 
+        GameObject other = FindObjectAtCell(target);
+        if (other != null && other != gameObject)
+            return;
+
         StartCoroutine(AnimateMove(target));
     }
 
@@ -79,6 +83,17 @@ public class MimicObject : MonoBehaviour, IMimicable
         {
             Destroy(gameObject);
         }
+    }
+
+    GameObject FindObjectAtCell(Vector2Int cell)
+    {
+        Vector3 worldPos = grid.CellToWorld(cell);
+        Collider2D col = Physics2D.OverlapPoint(worldPos);
+
+        if (col != null)
+            return col.gameObject;
+
+        return null;
     }
 
     public void ResetObject()
