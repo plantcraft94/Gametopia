@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PullableComponent : MonoBehaviour, IPullable
+public class PullableComponent : MonoBehaviour, IPullable, IResettable
 {
     public Vector2Int cellPos;
     Vector2Int startCell;

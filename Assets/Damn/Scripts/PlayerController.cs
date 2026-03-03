@@ -42,7 +42,31 @@ public class PlayerController : MonoBehaviour
     public bool TryGetForwardCell(out Vector2Int next)
     {
         next = cellPos + FacingToVector(facing);
-        return grid.CanEnter(next);
+
+        if (!grid.CanEnter(next))
+            return false;
+
+        GameObject obj = FindObjectAtCell(next);
+        if (obj != null)
+        {
+            DoorComponent door = obj.GetComponent<DoorComponent>();
+            if (door != null)
+            {
+                return door.TryOpen(this);
+            }
+        }
+
+        return true;
+    }
+    GameObject FindObjectAtCell(Vector2Int cell)
+    {
+        Vector3 worldPos = grid.CellToWorld(cell);
+        Collider2D col = Physics2D.OverlapPoint(worldPos);
+
+        if (col != null)
+            return col.gameObject;
+
+        return null;
     }
 
     public Vector2Int GetFacingVector()

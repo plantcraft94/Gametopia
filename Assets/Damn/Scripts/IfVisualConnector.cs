@@ -31,7 +31,7 @@ public class IfVisualConnector : MonoBehaviour
             Vector3 startPos = rect.anchoredPosition;
             Vector3 endPos = end.anchoredPosition;
 
-            Debug.Log($"{endPos.y} , {end.sizeDelta.y}, {startPos.y}, {rect.sizeDelta.y}");
+            //Debug.Log($"{endPos.y} , {end.sizeDelta.y}, {startPos.y}, {rect.sizeDelta.y}");
 
             float height = Mathf.Abs(endPos.y - end.sizeDelta.y / 2 - (startPos.y + rect.sizeDelta.y / 2));
 

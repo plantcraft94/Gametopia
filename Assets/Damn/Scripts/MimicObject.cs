@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MimicObject : MonoBehaviour, IMimicable
+public class MimicObject : MonoBehaviour, IMimicable, IResettable
 {
     public Vector2Int cellPos;
 
