@@ -853,7 +853,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   winPanel: {fileID: 1503225688}
-  failPanel: {fileID: 1643708011}
 --- !u!4 &258565907
 Transform:
   m_ObjectHideFlags: 0
@@ -2355,7 +2354,7 @@ GameObject:
   - component: {fileID: 805135125}
   m_Layer: 0
   m_Name: MimicAbleObj
-  m_TagString: MimicAble
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3206,7 +3205,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 582238256}
   m_HandleRect: {fileID: 582238255}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6024,7 +6023,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1254186366}
   m_HandleRect: {fileID: 1254186365}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

@@ -193,4 +193,8 @@ public class PlayerController : MonoBehaviour
     {
         return grid.IsGoal(cell);
     }
+    public Vector2Int GetFacingVector()
+{
+    return FacingToVector(facing);
+}
 }
