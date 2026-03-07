@@ -47,13 +47,17 @@ public class PlayerController : MonoBehaviour
             return false;
 
         GameObject obj = FindObjectAtCell(next);
+
         if (obj != null)
         {
             DoorComponent door = obj.GetComponent<DoorComponent>();
             if (door != null)
-            {
                 return door.TryOpen(this);
-            }
+
+            if (obj.CompareTag("KeyItem"))
+                return true;
+
+            return false;
         }
 
         return true;

@@ -936,6 +936,9 @@ MonoBehaviour:
     - m_Text: Goal
       m_Image: {fileID: 0}
       m_Color: {r: 0, g: 0, b: 0, a: 0}
+    - m_Text: Hole
+      m_Image: {fileID: 0}
+      m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2439,7 +2442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CommandController
   parent: {fileID: 0}
-  canvas: {fileID: 0}
   placeholder: {fileID: 3934461771677449545, guid: 2c4fa820e161a3949bda54ee62b5b9b9, type: 3}
   background: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}

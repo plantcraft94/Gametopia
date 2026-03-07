@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class MimicObject : MonoBehaviour, IMimicable, IResettable
 {
@@ -81,7 +82,7 @@ public class MimicObject : MonoBehaviour, IMimicable, IResettable
 
         if (grid.IsHole(cellPos))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -101,6 +102,8 @@ public class MimicObject : MonoBehaviour, IMimicable, IResettable
         Unbind();
 
         StopAllCoroutines();
+
+        gameObject.SetActive(true);
 
         cellPos = startCell;
 

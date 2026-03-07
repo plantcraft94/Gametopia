@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,9 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")]
     public GameObject winPanel;
+
+    [Header("Level")]
+    public float winDelay = 1.5f;
 
     void Awake()
     {
@@ -20,6 +25,27 @@ public class GameManager : MonoBehaviour
         CurrentState = newState;
 
         winPanel.SetActive(newState == GameState.Win);
+
+        if (newState == GameState.Win)
+        {
+            StartCoroutine(LoadNextLevel());
+        }
+    }
+
+    IEnumerator LoadNextLevel()
+    {
+        yield return new WaitForSeconds(winDelay);
+
+        int currentIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextIndex = currentIndex + 1;
+
+        if (nextIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.Log("WINNN!!");
+            yield break;
+        }
+
+        SceneManager.LoadScene(nextIndex);
     }
 
     public bool IsRunning()

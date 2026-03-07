@@ -58,7 +58,7 @@ public class PullableComponent : MonoBehaviour, IPullable, IResettable
 
         if (grid.IsHole(target))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 

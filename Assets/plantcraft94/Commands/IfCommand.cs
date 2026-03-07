@@ -14,7 +14,8 @@ public enum TileCheckType
 {
     Wall,
     Ground,
-    Goal
+    Goal,
+    Hole
 }
 
 public class IfCommand : PairedCommand, IInstruction
@@ -54,7 +55,6 @@ public class IfCommand : PairedCommand, IInstruction
     {
         var player = context.player;
 
-        // Lấy cell ở direction tương đối
         Vector2Int targetCell = player.GetRelativeCell(direction);
 
         switch (checkType)
@@ -67,6 +67,9 @@ public class IfCommand : PairedCommand, IInstruction
 
             case TileCheckType.Goal:
                 return player.IsGoal(targetCell);
+
+            case TileCheckType.Hole:
+                return context.grid.IsHole(targetCell);
         }
 
         return false;
